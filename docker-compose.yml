@@ -1,0 +1,20 @@
+Redis:
+  image: redis
+  restart: always
+  ports:
+    - "6379:6379"
+MongoDB:
+  image: sameersbn/mongodb:latest
+  ports:
+    - "27017:27017"
+  restart: always
+app:
+  build: "./"
+  restart: always
+  ports:
+    - "3000:3000"
+  links:
+    - "Redis"
+    - "MongoDB"
+  volumes:
+    - "./:/app"

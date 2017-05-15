@@ -1,0 +1,36 @@
+{
+    "name": "score-app",
+    "description": "Discover musical scores and soundtracks for popular movies and add them to a Spotify playlist",
+    "version": "0.0.0",
+    "private": true,
+    "scripts": {
+        "start": "node ./bin/www",
+        "dev-start": "NODE_ENV=development nodemon --debug ./bin/www",
+        "test": "NODE_ENV=testing tape test/**/*.js"
+    },
+    "dependencies": {
+        "bluebird": "^3.5.0",
+        "body-parser": "~1.17.1",
+        "connect-redis": "^3.3.0",
+        "cookie-parser": "~1.4.3",
+        "express": "~4.15.2",
+        "express-session": "^1.15.2",
+        "grant-express": "^3.7.2",
+        "isomorphic-fetch": "^2.2.1",
+        "materialize-css": "^0.98.2",
+        "mongoose": "^4.9.8",
+        "morgan": "~1.8.1",
+        "node-sass-middleware": "^0.11.0",
+        "path": "^0.12.7",
+        "pug": "~2.0.0-beta11",
+        "purest": "^3.0.1",
+        "redis": "^2.7.1",
+        "serve-favicon": "~2.4.2"
+    },
+    "devDependencies": {
+        "debug": "~2.6.3",
+        "nodemon": "^1.11.0",
+        "supertest": "^3.0.0",
+        "tape": "^4.6.3"
+    }
+}

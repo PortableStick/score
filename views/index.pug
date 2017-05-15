@@ -1,0 +1,27 @@
+extends layout
+
+block content
+  .navbar-fixed
+    nav
+      .nav-wrapper
+        a(href="#").brand-logo Logo
+        ul.right.hide-on-med-and-down
+          if user
+            li
+              a(href="#!", class="dropdown-button" data-activates="user-dropdown") Logged in as #{user.id}
+                i.material-icons.right
+          else
+            li
+              a(href="/connect/spotify") Login via Spotify
+            li
+              a(href="#") Signup to Spotify
+  .container
+    section.coverflow
+      each movie, index in movies
+        .coverflow-item(id=`movie-${index}`, data-title=movie.title, data-backdrop=imgurl + movie.backdrop_path)
+          img(src=imgurl + movie.poster_path)
+    h2#name
+  if user
+    ul#user-dropdown.dropdown-content
+      li
+        a(href="/logout" class="") Sign Out
