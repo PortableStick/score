@@ -4,24 +4,60 @@ block content
   .navbar-fixed
     nav
       .nav-wrapper
-        a(href="#").brand-logo Logo
+        a(href="#").brand-logo Score
+        a.button-collapse(href="#", data-activates="mobile")
+          i.material-icons menu
         ul.right.hide-on-med-and-down
           if user
             li
-              a(href="#!", class="dropdown-button" data-activates="user-dropdown") Logged in as #{user.id}
-                i.material-icons.right
+              a(href="#!", class="dropdown-button" data-activates="user-dropdown") Logged in as #{user.display_name || user.id}
+                i.material-icons.right arrow_drop_down
           else
             li
               a(href="/connect/spotify") Login via Spotify
-            li
-              a(href="#") Signup to Spotify
   .container
     section.coverflow
       each movie, index in movies
         .coverflow-item(id=`movie-${index}`, data-title=movie.title, data-backdrop=imgurl + movie.backdrop_path)
           img(src=imgurl + movie.poster_path)
     h2#name
+    .row
+      .col.m6
+        ul.collection.with-header
+          li.collection-header Tracks
+          li.collection-item Track 1
+          li.collection-item Track 2
+          li.collection-item Track 3
+      if user && user.playlists
+        .input-field.col.m6
+          select
+            each playlist, index in user.playlists
+              option(value=playlist.uri)=playlist.name
+          label Playlists
+          button.btn.waves-effect.waves-light(data-target="playlist-modal") New Playlist
   if user
     ul#user-dropdown.dropdown-content
       li
-        a(href="/logout" class="") Sign Out
+        a(href="/logout") Sign Out
+  ul#mobile.side-nav
+    if user
+      li
+        a(href="#!") Logged in as #{user.display_name || user.id}
+      li
+        a.waves-effect.waves-light.btn(href="/logout") Sign Out
+    else
+      li
+        a(href="/connect/spotify") Login via Spotify
+
+  #playlist-modal.modal
+    .modal-content
+      h4 Create a New Playlist
+      .input-field
+        input(placeholder="Playlist Name", name="name", id="new-playlist-name")
+        label(for="new-playlist-name") Playlist Name
+      .input-field
+        textarea.materialize-textarea#new-playlist-description
+        label(for="new-playlist-description") Playlist description (optional)
+    .modal-footer
+      button.waves-effect.waves-light.btn(type="button") Create
+      button.waves-effect.waves-light.btn.modal-close(type="button") Cancel

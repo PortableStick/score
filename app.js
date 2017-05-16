@@ -11,6 +11,7 @@ const RedisStore = require('connect-redis')(session)
 const mongoose = require('mongoose')
 const sassMiddleware = require('node-sass-middleware')
 const getUserData = require('./middleware/getUserData')
+const getUserPlaylists = require('./middleware/getUserPlaylists')
 const logout = require('./routes/logout')
 const app = express();
 const { SESSION_SECRET, MONGO_URL, SASSCONFIG } = require('./constants')
@@ -46,7 +47,7 @@ app.use(grant)
 
 
 // Routes
-app.use('/', getUserData, index)
+app.use('/', getUserData, getUserPlaylists, index)
 app.use('/healthCheck', healthCheck)
 app.use('/callback', callback)
 app.use('/logout', logout)
