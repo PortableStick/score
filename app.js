@@ -13,6 +13,7 @@ const sassMiddleware = require('node-sass-middleware')
 const getUserData = require('./middleware/getUserData')
 const getUserPlaylists = require('./middleware/getUserPlaylists')
 const logout = require('./routes/logout')
+const refresh = require('./routes/refresh')
 const app = express();
 const { SESSION_SECRET, MONGO_URL, SASSCONFIG } = require('./constants')
 const GRANT_CONFIG = require('./grantConfig')
@@ -47,7 +48,8 @@ app.use(grant)
 
 
 // Routes
-app.use('/', getUserData, getUserPlaylists, index)
+app.use('/refresh', refresh)
+app.use('/', index)
 app.use('/healthCheck', healthCheck)
 app.use('/callback', callback)
 app.use('/logout', logout)

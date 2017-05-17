@@ -34,14 +34,6 @@ function handleResponse(response) {
 }
 
 /**
- * @param {Object} error
- * @return {string}
- */
-function handleError(error) {
-    return Promise.reject(`Fetch error: ${error.status}:${error.message}`)
-}
-
-/**
  * @param {string} url
  * @param {QueryObject[]} [queries=[]]
  * @param {Object} [headers={}]
@@ -50,7 +42,7 @@ function handleError(error) {
 function getJSON(url, queries = [], headers = {}) {
     const header = Object.assign({}, GET_HEADERS, headers)
     return fetch(`${url}${createQueries(queries)}`, { headers: Object.assign({}, GET_HEADERS, headers) })
-        .then(handleResponse, handleError)
+        .then(handleResponse)
 }
 
 /**
@@ -62,7 +54,21 @@ function getJSON(url, queries = [], headers = {}) {
 function postJSON(url, body, queries = [], headers = {}) {
     return fetch(`${url}${createQueries(queries)}`, { headers: Object.assign({}, POST_HEADERS, headers), body: JSON.stringify(body), method: 'POST' })
         .then(handleResponse)
-        .catch(handleError)
 }
 
-module.exports = { getJSON, postJSON }
+/**
+ * @param {string} url
+ * @param {QueryObject[]} [queries=[]]
+ * @param {Object} [headers={}]
+ * @return {Promise}
+ */
+function postFormData(url, body, queries = [], headers = {}) {
+    let formBody = ''
+    for (let X in body) {
+        formBody += `${formBody !== '' ? '&' : ''}${X}=${body[X]}`
+    }
+    return fetch(`${url}${createQueries(queries)}`, { headers: Object.assign({}, { 'Content-Type': 'application/x-www-form-urlencoded' }, headers), body: formBody, method: 'POST' })
+        .then(handleResponse)
+}
+
+module.exports = { getJSON, postJSON, postFormData }

@@ -1,5 +1,5 @@
-const { getJSON, postJSON } = require('./ajaxOps')
-const { SPOTIFY_URL } = require('../constants')
+const { getJSON, postFormData } = require('./ajaxOps')
+const { SPOTIFY_URL, SPOTIFY_REFRESH_URL, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = require('../constants')
 
 function getFromSpotify(token, url) {
     return getJSON(`${SPOTIFY_URL}${url}`, null, { 'Authorization': `Bearer ${token}` })
@@ -20,4 +20,13 @@ function getPlaylists(token) {
 function createPlaylist(token, body, user) {
     return postToSpotify(token, body, `users/${user.id}/playlists`)
 }
-module.exports = { getUser, getPlaylists, createPlaylist }
+
+function refreshToken(refresh_token) {
+    const refreshBody = {
+        'grant_type': 'refresh_token',
+        'refresh_token': refresh_token
+    }
+    const encodedSecret = Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString('base64')
+    return postFormData(`${SPOTIFY_REFRESH_URL}`, refreshBody, null, { 'Authorization': `Basic ${encodedSecret}` })
+}
+module.exports = { getUser, getPlaylists, createPlaylist, refreshToken }

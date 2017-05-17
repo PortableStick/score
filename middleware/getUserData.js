@@ -8,7 +8,9 @@ function getUserData(request, response, next) {
                 request.user = user
                 next()
             })
-            .catch(error => console.error(error))
+            .catch(error => {
+                if (error.status === 401) { response.redirect('/refresh') } else { console.error('error while fetching user data, ', error) }
+            })
     } else {
         next()
     }

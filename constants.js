@@ -27,6 +27,7 @@ if (!TMDB_API_KEY) {
 
 const SPOTIFY_URL = 'https://api.spotify.com/v1/'
 const SPOTIFY_LOGIN_URL = 'https://accounts.spotify.com/authorize/'
+const SPOTIFY_REFRESH_URL = 'https://accounts.spotify.com/api/token'
 const TMDB_URL = 'https://api.themoviedb.org/3/'
 const TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/w185'
 
@@ -63,6 +64,7 @@ module.exports = {
     SPOTIFY_CLIENT_SECRET,
     SPOTIFY_URL,
     SPOTIFY_LOGIN_URL,
+    SPOTIFY_REFRESH_URL,
     TMDB_API_KEY,
     TMDB_URL,
     TMDB_IMAGE_URL,
