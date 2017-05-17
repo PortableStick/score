@@ -30,6 +30,7 @@ const SPOTIFY_LOGIN_URL = 'https://accounts.spotify.com/authorize/'
 const SPOTIFY_REFRESH_URL = 'https://accounts.spotify.com/api/token'
 const TMDB_URL = 'https://api.themoviedb.org/3/'
 const TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/w185'
+const TMDB_BACKDROP_URL = 'https://image.tmdb.org/t/p/original'
 
 const GET_HEADERS = {
     'Accept': 'application/json'
@@ -68,6 +69,7 @@ module.exports = {
     TMDB_API_KEY,
     TMDB_URL,
     TMDB_IMAGE_URL,
+    TMDB_BACKDROP_URL,
     API_URL,
     CALLBACK_URL,
     SPOTIFY_SCOPES,

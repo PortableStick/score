@@ -16,11 +16,12 @@ block content
             li
               a(href="/connect/spotify") Login via Spotify
   .container
-    section.coverflow
-      each movie, index in movies
-        .coverflow-item(id=`movie-${index}`, data-title=movie.title, data-backdrop=imgurl + movie.backdrop_path)
-          img(src=imgurl + movie.poster_path)
-    h2#name
+    .display
+      section.coverflow
+        each movie, index in movies
+          .coverflow-item(id=`movie-${index}`, data-title=movie.title, data-backdrop=imgurl + movie.poster_path)
+            img(src=bdurl + movie.backdrop_path)
+      h2#name
     .row
       .col.m6
         ul.collection.with-header

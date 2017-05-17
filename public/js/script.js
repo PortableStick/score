@@ -12,10 +12,22 @@ function _view() {
             $('#name').html(title)
         })
         $('.coverflow').slick({
-            centerPadding: '60px',
-            centerMode: true,
-            slidesToShow: 3,
-            dots: true
+            slidesToShow: 1,
+            dots: true,
+            responsive: [{
+                    breakpoint: 768,
+                    settings: {
+                        dots: false
+                    }
+                },
+                {
+                    breakpoint: 540,
+                    settings: {
+                        arrows: false,
+                        dots: false
+                    }
+                }
+            ]
         })
         $('.coverflow').on('afterChange', (event, slick, slide) => {
             let currentMovie = $(`#movie-${slide}`)
