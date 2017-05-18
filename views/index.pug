@@ -10,7 +10,9 @@ block content
         ul.right.hide-on-med-and-down
           if user
             li
-              a(href="#!", class="dropdown-button" data-activates="user-dropdown") Logged in as #{user.display_name || user.id}
+              a(href="#!", class="dropdown-button" data-activates="user-dropdown")
+                span.nav-logged Logged in as
+                  span.username  #{user.display_name || user.id}
                 i.material-icons.right arrow_drop_down
           else
             li

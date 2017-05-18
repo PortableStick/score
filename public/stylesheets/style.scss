@@ -46,3 +46,17 @@ main {
 .btn.btn-large {
     padding: 0 1rem;
 }
+
+.nav-logged {
+    font-weight: 300;
+}
+
+.username {
+    font-weight: 500;
+}
+
+nav .brand-logo {
+    @media screen and (min-width: 992px) {
+        left: 10px;
+    }
+}
