@@ -1,3 +1,4 @@
+$buttonOffset: -60px;
 .container {
     margin-top: 30px;
 }
@@ -14,13 +15,6 @@
     }
 }
 
-.slick-arrow {
-    background-color: #000;
-    &:hover {
-        background-color: #333;
-    }
-}
-
 .attribution {
     max-width: 100px;
 }
@@ -33,4 +27,22 @@ body {
 
 main {
     flex: 1 0 auto;
+}
+
+.next,
+.previous {
+    position: absolute;
+    top: 45%;
+}
+
+.next {
+    left: $buttonOffset;
+}
+
+.previous {
+    right: $buttonOffset;
+}
+
+.btn.btn-large {
+    padding: 0 1rem;
 }

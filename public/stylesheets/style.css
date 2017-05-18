@@ -14,14 +14,6 @@
   max-height: 20%;
 }
 
-.slick-arrow {
-  background-color: #000;
-}
-
-.slick-arrow:hover {
-  background-color: #333;
-}
-
 .attribution {
   max-width: 100px;
 }
@@ -34,4 +26,22 @@ body {
 
 main {
   flex: 1 0 auto;
+}
+
+.next,
+.previous {
+  position: absolute;
+  top: 45%;
+}
+
+.next {
+  left: -60px;
+}
+
+.previous {
+  right: -60px;
+}
+
+.btn.btn-large {
+  padding: 0 1rem;
 }

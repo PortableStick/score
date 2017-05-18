@@ -10,9 +10,17 @@ function _view() {
             let currentMovie = $(`#movie-${slick.currentSlide}`)
 
         })
+
+        $('.coverflow').on('afterChange', (event, slick, slide) => {
+            let currentMovie = $(`#movie-${slide}`)
+
+        })
+
         $('.coverflow').slick({
             slidesToShow: 1,
             dots: true,
+            prevArrow: '<button type="button" class="btn btn-large next"><i class="material-icons">skip_previous</i></button>',
+            nextArrow: '<button type="button" class="btn btn-large previous"><i class="material-icons">skip_next</i></button>',
             responsive: [{
                     breakpoint: 768,
                     settings: {
@@ -27,10 +35,6 @@ function _view() {
                     }
                 }
             ]
-        })
-        $('.coverflow').on('afterChange', (event, slick, slide) => {
-            let currentMovie = $(`#movie-${slide}`)
-
         })
 
         //stuff for materialize
