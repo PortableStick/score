@@ -2,30 +2,16 @@
   margin-top: 30px;
 }
 
-.display {
-  text-align: center;
+.card.large .card-image {
+  max-height: 80%;
 }
 
-.slick-list {
-  max-height: 400px;
+.card.large .card-image .poster {
+  transform: translateY(-40px);
 }
 
-.coverflow-item img {
-  width: 100%;
-}
-
-@media screen and (min-width: 1200px) {
-  .coverflow-item img {
-    transform: scale(0.8) translateY(-20%);
-  }
-}
-
-.coverflow-item .title {
-  position: absolute;
-  top: 80%;
-  margin-left: 10px;
-  font-size: 1.8em;
-  color: white;
+.card.large .card-content {
+  max-height: 20%;
 }
 
 .slick-arrow {
@@ -34,4 +20,18 @@
 
 .slick-arrow:hover {
   background-color: #333;
+}
+
+.attribution {
+  max-width: 100px;
+}
+
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
 }

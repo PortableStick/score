@@ -2,27 +2,15 @@
     margin-top: 30px;
 }
 
-.display {
-    text-align: center;
-}
-
-.slick-list {
-    max-height: 400px;
-}
-
-.coverflow-item {
-    img {
-        width: 100%;
-        @media screen and (min-width: 1200px) {
-            transform: scale(0.8) translateY(-20%);
+.card.large {
+    .card-image {
+        max-height: 80%;
+        .poster {
+            transform: translateY(-40px);
         }
     }
-    .title {
-        position: absolute;
-        top: 80%;
-        margin-left: 10px;
-        font-size: 1.8em;
-        color: white;
+    .card-content {
+        max-height: 20%;
     }
 }
 
@@ -31,4 +19,18 @@
     &:hover {
         background-color: #333;
     }
+}
+
+.attribution {
+    max-width: 100px;
+}
+
+body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+main {
+    flex: 1 0 auto;
 }

@@ -8,8 +8,7 @@ function _view() {
         //stuff for slick
         $('.coverflow').on('init', (event, slick) => {
             let currentMovie = $(`#movie-${slick.currentSlide}`)
-            let title = currentMovie.data('title')
-            $('#name').html(title)
+
         })
         $('.coverflow').slick({
             slidesToShow: 1,
@@ -31,8 +30,7 @@ function _view() {
         })
         $('.coverflow').on('afterChange', (event, slick, slide) => {
             let currentMovie = $(`#movie-${slide}`)
-            let title = currentMovie.data('title')
-            $('#name').html(title)
+
         })
 
         //stuff for materialize

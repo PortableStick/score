@@ -15,27 +15,38 @@ block content
           else
             li
               a(href="/connect/spotify") Login via Spotify
-  .container
+  main.container
     .display
       section.coverflow
         each movie, index in movies
-          .coverflow-item(id=`movie-${index}`, data-title=movie.title, data-backdrop=imgurl + movie.poster_path)
-            img(src=bdurl + movie.backdrop_path)
-      h2#name
+          .coverflow-item.card.large(id=`movie-${index}`, data-title=movie.title, data-cover=imgurl + movie.poster_path)
+            .card-image.waves-effect.waves-block.waves-light
+              img.activator.hide-on-small-only(src=bdurl + movie.backdrop_path)
+              img.activator.hide-on-med-and-up.poster(src=bdurl + movie.poster_path)
+            .card-content
+              .card-title.activator.grey-text.text-darken-4=movie.title
+            .card-reveal
+              .card-title.text-darken-3=movie.title
+                  .material-icons.right close
+              p.grey-text.text-darken-1.text-accent-1=movie.overview
     .row
-      .col.m6
+      .col.m6.s12
         ul.collection.with-header
           li.collection-header Tracks
           li.collection-item Track 1
           li.collection-item Track 2
           li.collection-item Track 3
       if user && user.playlists
-        .input-field.col.m6
+        .input-field.col.m6.s12
           select
             each playlist, index in user.playlists
               option(value=playlist.uri)=playlist.name
           label Playlists
           button.btn.waves-effect.waves-light(data-target="playlist-modal") New Playlist
+  footer.page-footer
+    .row
+      a.col.s6(href="https://www.themoviedb.org")
+        img.attribution(type="image/svg+xm", src="/images/powered-by-rectangle-blue.svg", alt="Powered by TMDB")
   if user
     ul#user-dropdown.dropdown-content
       li
@@ -49,7 +60,6 @@ block content
     else
       li
         a(href="/connect/spotify") Login via Spotify
-
   #playlist-modal.modal
     .modal-content
       h4 Create a New Playlist
