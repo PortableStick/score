@@ -1,4 +1,4 @@
-const { getJSON, postFormData } = require('./ajaxOps')
+const { getJSON, postJSON, postFormData } = require('./ajaxOps')
 const { SPOTIFY_URL, SPOTIFY_REFRESH_URL, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = require('../constants')
 
 function getFromSpotify(token, url) {
@@ -18,7 +18,7 @@ function getPlaylists(token) {
 }
 
 function createPlaylist(token, body, user) {
-    return postToSpotify(token, body, `users/${user.id}/playlists`)
+    return postToSpotify(token, `users/${user.id}/playlists`, body)
 }
 
 function refreshToken(refresh_token) {

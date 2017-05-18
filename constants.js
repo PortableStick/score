@@ -36,12 +36,12 @@ const GET_HEADERS = {
     'Accept': 'application/json'
 }
 const STATEKEY = 'spotify_auth_state'
-const SPOTIFY_SCOPES = ['user-read-private', 'user-read-email'].join(' ')
+const SPOTIFY_SCOPES = ['user-read-private', 'user-read-email', 'playlist-modify-public', 'playlist-modify-private'].join(' ')
 const SPOTIFY_CONFIG = {
     "client_id": SPOTIFY_CLIENT_ID,
     "client_secret": SPOTIFY_CLIENT_SECRET,
     "response_type": 'code',
-    "scopes": SPOTIFY_SCOPES,
+    "scope": SPOTIFY_SCOPES,
     "callback": '/callback'
 }
 

@@ -26,11 +26,11 @@ block content
               img.activator.hide-on-small-only(src=bdurl + movie.backdrop_path)
               img.activator.hide-on-med-and-up.poster(src=bdurl + movie.poster_path)
             .card-content
-              .card-title.activator.grey-text.text-darken-4=movie.title
+              .card-title.activator.grey-text=movie.title
             .card-reveal
-              .card-title.text-darken-3=movie.title
+              .card-title=movie.title
                   .material-icons.right close
-              p.grey-text.text-darken-1.text-accent-1=movie.overview
+              p.grey-text.text-darken-1=movie.overview
     .row
       .col.m6.s12
         ul.collection.with-header
@@ -38,12 +38,15 @@ block content
           li.collection-item Track 1
           li.collection-item Track 2
           li.collection-item Track 3
-      if user && user.playlists
+      if user
         .input-field.col.m6.s12
-          select
-            each playlist, index in user.playlists
-              option(value=playlist.uri)=playlist.name
-          label Playlists
+          if user.playlists.length > 0
+            select
+              each playlist, index in user.playlists
+                option(value=playlist.uri)=playlist.name
+            label Playlists
+          else
+            p You don't have any playlists. Create one using the button below.
           button.btn.waves-effect.waves-light(data-target="playlist-modal") New Playlist
   footer.page-footer
     .row
@@ -65,12 +68,19 @@ block content
   #playlist-modal.modal
     .modal-content
       h4 Create a New Playlist
-      .input-field
-        input(placeholder="Playlist Name", name="name", id="new-playlist-name")
-        label(for="new-playlist-name") Playlist Name
-      .input-field
-        textarea.materialize-textarea#new-playlist-description
-        label(for="new-playlist-description") Playlist description (optional)
-    .modal-footer
-      button.waves-effect.waves-light.btn(type="button") Create
-      button.waves-effect.waves-light.btn.modal-close(type="button") Cancel
+      form(method="POST", action="/playlist")
+        .input-field
+          input(name="name", id="new-playlist-name", type="text", required)
+          label(for="new-playlist-name") Playlist Name
+        .input-field
+          textarea.materialize-textarea#new-playlist-description(name="description")
+          label(for="new-playlist-description") Playlist description (optional)
+        .row
+          .col.sm3
+            input(name="public", id="public-check", type="checkbox", value="true", checked="checked")
+            label(for="public-check") Public?
+          .col.sm3.push-s3
+            button.waves-effect.waves-light.btn#create(type="submit") Create
+              i.material-icons.right send
+          .col.sm3.push-s3
+            button.waves-effect.waves-light.btn.modal-close.red(type="button") Cancel

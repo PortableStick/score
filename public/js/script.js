@@ -4,6 +4,9 @@ $(document).ready(function() {
 });
 
 function _view() {
+    let playlistName = $('#new-playlist-name')
+    let playlistDescription = $('#new-playlist-description')
+
     function init() {
         //stuff for slick
         $('.coverflow').on('init', (event, slick) => {
@@ -35,6 +38,10 @@ function _view() {
                     }
                 }
             ]
+        })
+
+        $('#create').click(() => {
+
         })
 
         //stuff for materialize

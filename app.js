@@ -14,6 +14,7 @@ const getUserData = require('./middleware/getUserData')
 const getUserPlaylists = require('./middleware/getUserPlaylists')
 const logout = require('./routes/logout')
 const refresh = require('./routes/refresh')
+const playlist = require('./routes/playlist')
 const app = express();
 const { SESSION_SECRET, MONGO_URL, SASSCONFIG } = require('./constants')
 const GRANT_CONFIG = require('./grantConfig')
@@ -49,10 +50,11 @@ app.use(grant)
 
 // Routes
 app.use('/refresh', refresh)
-app.use('/', index)
 app.use('/healthCheck', healthCheck)
 app.use('/callback', callback)
 app.use('/logout', logout)
+app.use('/playlist', getUserData, playlist)
+app.use('/', getUserData, getUserPlaylists, index)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
