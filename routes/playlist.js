@@ -6,10 +6,10 @@ router.post('/', (request, response) => {
     const newPlaylist = request.body
     const token = request.session.grant.response.access_token
     createPlaylist(token, newPlaylist, request.user)
-        .then(() => {
-            response.redirect('/')
+        .then(data => {
+            response.json(data)
         })
-        .catch(error => response.redirect('/'))
+        .catch(error => response.json(error))
 })
 
 module.exports = router

@@ -40,14 +40,13 @@ block content
           li.collection-item Track 3
       if user
         .input-field.col.m6.s12
-          if user.playlists.length > 0
-            select
-              each playlist, index in user.playlists
-                option(value=playlist.uri)=playlist.name
-            label Playlists
-          else
-            p You don't have any playlists. Create one using the button below.
+          select#playlists
+            each playlist, index in user.playlists
+              option(value=playlist.uri)=playlist.name
+          label Playlists
           button.btn.waves-effect.waves-light(data-target="playlist-modal") New Playlist
+          #widget
+            iframe(src="https://open.spotify.com/embed?uri=" + user.playlists[0].uri, width="300", height="380", frameborder="0", allowtransparency="true")
   footer.page-footer
     .row
       a.col.s6(href="https://www.themoviedb.org")
@@ -68,7 +67,7 @@ block content
   #playlist-modal.modal
     .modal-content
       h4 Create a New Playlist
-      form(method="POST", action="/playlist")
+      form#playlist-form
         .input-field
           input(name="name", id="new-playlist-name", type="text", required)
           label(for="new-playlist-name") Playlist Name

@@ -4,8 +4,14 @@ $(document).ready(function() {
 });
 
 function _view() {
-    let playlistName = $('#new-playlist-name')
-    let playlistDescription = $('#new-playlist-description')
+    const playlistName = $('#new-playlist-name')
+    const playlistDescription = $('#new-playlist-description')
+    const playlists = $('#playlists')
+    const playlistForm = $('#playlist-form')
+    const optionTemplate = Handlebars.compile('<option value={{uri}} selected="selected">{{name}}</option>')
+    const playlistWidgetTemplate = Handlebars.compile('<iframe src="https://open.spotify.com/embed?uri={{uri}}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>')
+    const playlistModal = $('#playlist-modal')
+    const widget = $('#widget')
 
     function init() {
         //stuff for slick
@@ -40,8 +46,34 @@ function _view() {
             ]
         })
 
-        $('#create').click(() => {
+        playlistForm.submit(function(event) {
+            event.preventDefault()
+            const formData = $(this).serializeArray().reduce((prev, curr) => {
+                if (curr.value === "") return prev
+                prev[curr.name] = curr.value
+                return prev
+            }, {})
+            fetch('/playlist', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' }, credentials: 'same-origin' })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    return Promise.reject(error)
+                })
+                .then(data => {
+                    playlists.prepend(optionTemplate(data))
+                    playlists.material_select()
+                    playlistModal.modal('close')
+                })
+                .catch(error => {
+                    // TODO:
+                    // - handle errors
+                })
+        })
 
+        playlists.change(function(event) {
+            const newPlaylist = playlistWidgetTemplate({ uri: event.target.selectedOptions[0].value })
+            widget.html(newPlaylist)
         })
 
         //stuff for materialize
@@ -49,7 +81,7 @@ function _view() {
         $('.button-collapse').sideNav()
         $('select').material_select()
         $('#new-playlist-description').trigger('autoresize')
-        $('.modal').modal()
+        playlistModal.modal()
     }
     return { init }
 }
