@@ -9,7 +9,7 @@ function _view() {
     const playlists = $('#playlists')
     const playlistForm = $('#playlist-form')
     const optionTemplate = Handlebars.compile('<option value={{uri}} selected="selected">{{name}}</option>')
-    const playlistWidgetTemplate = Handlebars.compile('<iframe src="https://open.spotify.com/embed?uri={{uri}}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>')
+    const playlistWidgetTemplate = Handlebars.compile('<iframe src="https://open.spotify.com/embed?theme=white&uri={{uri}}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>')
     const playlistModal = $('#playlist-modal')
     const widget = $('#widget')
 
