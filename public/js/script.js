@@ -10,7 +10,7 @@ function _view() {
     const playlistForm = $('#playlist-form')
     const optionTemplate = Handlebars.compile('<option value={{uri}} selected="selected">{{name}}</option>')
     const playlistWidgetTemplate = Handlebars.compile('<iframe src="https://open.spotify.com/embed?theme=white&uri={{uri}}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>')
-    const albumTitleTemplate = Handlebars.compile('<li class="collection-header">{{name}}</li>{{#each tracks}}<li class="collection-item"><span>{{track_number}} - {{name}}</span></li>{{/each}}')
+    const albumTitleTemplate = Handlebars.compile('{{#each albums}}<li class="collection-header">{{name}}</li>{{#each tracks}}<li class="collection-item"><span>{{track_number}} - {{name}}</span></li>{{/each}}{{/each}}')
     const playlistModal = $('#playlist-modal')
     const widget = $('#widget')
     const albumWidget = $('#album')
@@ -20,15 +20,21 @@ function _view() {
     }
 
     function populateTracks(currentMovie) {
-        let title = soundtrackify(currentMovie.data('title'))
-        fetch(`/tracks/${title}`, { credentials: 'same-origin' })
+        const title = soundtrackify(currentMovie.data('title'))
+        const year = currentMovie.data('release-date').slice(0, 4)
+        fetch(`/tracks/${title}?year=${year}`, { credentials: 'same-origin' })
             .then(response => {
                 if (response.ok) return response.json()
                 Promise.reject(response)
             })
             .then(albums => {
-                const trackList = albumTitleTemplate(albums[0])
-                albumWidget.html(trackList)
+                if (albums.length) {
+                    const trackList = albumTitleTemplate({ albums })
+                    albumWidget.html(trackList)
+                } else {
+                    albumWidget.html('<li class="collection-header">There doesn\'t seem to be any albums for this movie</li>')
+                }
+
             })
             .catch(error => {
 
@@ -38,12 +44,14 @@ function _view() {
     function init() {
         //stuff for slick
         $('.coverflow').on('init', (event, slick) => {
-            let currentMovie = $(`#movie-${slick.currentSlide}`)
+            const currentMovie = $(`#movie-${slick.currentSlide}`)
             populateTracks(currentMovie)
         })
 
+        $('.coverflow').on('beforeChange', () => albumWidget.html('<li class="collection-item"><div class="progress"><div class="indeterminate"></div></div></li>'))
+
         $('.coverflow').on('afterChange', (event, slick, slide) => {
-            let currentMovie = $(`#movie-${slide}`)
+            const currentMovie = $(`#movie-${slide}`)
             populateTracks(currentMovie)
         })
 

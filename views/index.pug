@@ -29,12 +29,15 @@ block content
               .card-title.activator.grey-text=movie.title
             .card-reveal
               .card-title=movie.title
-                  .material-icons.right close
+                i.material-icons.right close
               p.grey-text.text-darken-1=movie.overview
-    .row
-      .col.m6.s12
-        ul.collection.with-header#album
-      if user
+    if user
+      .row
+        .col.m6.s12
+          ul.collection.with-header#album
+            li.collection-item
+              .progress
+                .indeterminate
         .input-field.col.m6.s12
           select#playlists
             each playlist, index in user.playlists

@@ -21,7 +21,7 @@ function createPlaylist(token, body, user) {
     return postToSpotify(token, `users/${user.id}/playlists`, body)
 }
 
-function getAlbums(token, title) {
+function getAlbums(token, title, year) {
     return getFromSpotify(token, `search?type=album&q=${title}`)
 }
 
