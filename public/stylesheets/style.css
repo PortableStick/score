@@ -63,3 +63,8 @@ main {
 #widget {
   margin-top: 10px;
 }
+
+#album {
+  max-height: 500px;
+  overflow-y: scroll;
+}

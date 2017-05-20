@@ -21,6 +21,15 @@ function createPlaylist(token, body, user) {
     return postToSpotify(token, `users/${user.id}/playlists`, body)
 }
 
+function getAlbums(token, title) {
+    return getFromSpotify(token, `search?type=album&q=${title}`)
+}
+
+function getTracks(token, albums) {
+    const promises = albums.map(album => getFromSpotify(token, `albums/${album.id}/tracks`))
+    return Promise.all(promises)
+}
+
 function refreshToken(refresh_token) {
     const refreshBody = {
         'grant_type': 'refresh_token',
@@ -29,4 +38,5 @@ function refreshToken(refresh_token) {
     const encodedSecret = Buffer.from(`${SPOTIFY_CLIENT_ID}:${SPOTIFY_CLIENT_SECRET}`).toString('base64')
     return postFormData(`${SPOTIFY_REFRESH_URL}`, refreshBody, null, { 'Authorization': `Basic ${encodedSecret}` })
 }
-module.exports = { getUser, getPlaylists, createPlaylist, refreshToken }
+
+module.exports = { getUser, getPlaylists, createPlaylist, refreshToken, getAlbums, getTracks }

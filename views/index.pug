@@ -21,7 +21,7 @@ block content
     .display
       section.coverflow
         each movie, index in movies
-          .coverflow-item.card.large(id=`movie-${index}`, data-title=movie.title, data-cover=imgurl + movie.poster_path)
+          .coverflow-item.card.large(id=`movie-${index}`, data-title=movie.title, data-release-date=movie.release_date)
             .card-image.waves-effect.waves-block.waves-light
               img.activator.hide-on-small-only(src=bdurl + movie.backdrop_path)
               img.activator.hide-on-med-and-up.poster(src=bdurl + movie.poster_path)
@@ -33,11 +33,7 @@ block content
               p.grey-text.text-darken-1=movie.overview
     .row
       .col.m6.s12
-        ul.collection.with-header
-          li.collection-header Tracks
-          li.collection-item Track 1
-          li.collection-item Track 2
-          li.collection-item Track 3
+        ul.collection.with-header#album
       if user
         .input-field.col.m6.s12
           select#playlists

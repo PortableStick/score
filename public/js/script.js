@@ -10,19 +10,41 @@ function _view() {
     const playlistForm = $('#playlist-form')
     const optionTemplate = Handlebars.compile('<option value={{uri}} selected="selected">{{name}}</option>')
     const playlistWidgetTemplate = Handlebars.compile('<iframe src="https://open.spotify.com/embed?theme=white&uri={{uri}}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>')
+    const albumTitleTemplate = Handlebars.compile('<li class="collection-header">{{name}}</li>{{#each tracks}}<li class="collection-item"><span>{{track_number}} - {{name}}</span></li>{{/each}}')
     const playlistModal = $('#playlist-modal')
     const widget = $('#widget')
+    const albumWidget = $('#album')
+
+    function soundtrackify(title) {
+        return title.length < 7 && title.search(/(original score)|(original motion picture soundtrack)/gi) === -1 ? encodeURIComponent(`${title} soundtrack`) : encodeURIComponent(title)
+    }
+
+    function populateTracks(currentMovie) {
+        let title = soundtrackify(currentMovie.data('title'))
+        fetch(`/tracks/${title}`, { credentials: 'same-origin' })
+            .then(response => {
+                if (response.ok) return response.json()
+                Promise.reject(response)
+            })
+            .then(albums => {
+                const trackList = albumTitleTemplate(albums[0])
+                albumWidget.html(trackList)
+            })
+            .catch(error => {
+
+            })
+    }
 
     function init() {
         //stuff for slick
         $('.coverflow').on('init', (event, slick) => {
             let currentMovie = $(`#movie-${slick.currentSlide}`)
-
+            populateTracks(currentMovie)
         })
 
         $('.coverflow').on('afterChange', (event, slick, slide) => {
             let currentMovie = $(`#movie-${slide}`)
-
+            populateTracks(currentMovie)
         })
 
         $('.coverflow').slick({
