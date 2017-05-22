@@ -54,7 +54,7 @@ app.use('/refresh', refresh)
 app.use('/healthCheck', healthCheck)
 app.use('/callback', callback)
 app.use('/logout', logout)
-app.use('/tracks', tracks)
+app.use('/tracks', getUserData, tracks)
 app.use('/playlist', getUserData, playlist)
 app.use('/', getUserData, getUserPlaylists, index)
 
