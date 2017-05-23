@@ -16,7 +16,7 @@ function _view(_c) {
     const playlistForm = $('#playlist-form')
     const optionTemplate = Handlebars.compile('<option value={{uri}} selected="selected">{{name}}</option>')
     const playlistWidgetTemplate = Handlebars.compile('<iframe src="https://open.spotify.com/embed?theme=white&uri={{uri}}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>')
-    const albumTitleTemplate = Handlebars.compile('{{#each albums}}<li class="collection-header">{{name}}</li>{{#each tracks}}<li class="collection-item row" data-id={{id}}><span class="col s10">{{track_number}} - {{name}}</span><button type="button" class="waves-effect waves-teal btn-flat secondary-content col s2">+</button></li>{{/each}}{{/each}}')
+    const albumTitleTemplate = Handlebars.compile('{{#each albums}}<li class="collection-header">{{name}}</li>{{#each tracks}}<li class="collection-item row" data-id={{id}}><span class="col s10">{{track_number}} - {{name}}</span><button type="button" class="tooltipped waves-effect waves-teal btn-flat secondary-content col s2 add-to-list" data-uri="{{uri}}">+</button></li>{{/each}}{{/each}}')
     const playlistModal = $('#playlist-modal')
     const widget = $('#widget')
     const trackAndAlbumList = $('#album')
@@ -32,7 +32,7 @@ function _view(_c) {
     }
 
     function soundtrackify(title) {
-        return title.length < SHORTTITLE && title.search(/(original score)|(original motion picture soundtrack)/gi) === -1 ? encodeURIComponent(`${title} soundtrack`) : encodeURIComponent(title)
+        return title.length < SHORTTITLE ? encodeURIComponent(`${title} soundtrack`) : encodeURIComponent(title)
     }
 
     function populateTracks(currentMovie) {
@@ -43,6 +43,7 @@ function _view(_c) {
                 if (albums.length) {
                     const trackList = albumTitleTemplate({ albums })
                     trackAndAlbumList.html(trackList)
+                    $('.tooltipped').tooltip({delay: 1000, tooltip: "Add to playlist", position: "right"})
                 } else {
                     trackAndAlbumList.html('<li class="collection-header">There doesn\'t seem to be any albums for this movie</li>')
                 }
@@ -88,6 +89,15 @@ function _view(_c) {
             ]
         })
 
+        trackAndAlbumList.on('click', '.add-to-list', event => {
+            controller.addTrackToPlaylist($(event.target).data('uri'))
+                .then(data => {
+                    updatePlaylistWidget()
+                    Materialize.toast('Added to playlist', 6000)
+                })
+                .catch(error => console.error(error))
+        })
+
         playlistForm.submit(function(event) {
             event.preventDefault()
             const formData = $(this).serializeArray().reduce((prev, curr) => {
@@ -118,6 +128,7 @@ function _view(_c) {
         $('select').material_select()
         $('#new-playlist-description').trigger('autoresize')
         playlistModal.modal()
+
         setCurrentPlaylist(playlists[0].selectedOptions[0].value)
     }
     return { init }
@@ -129,6 +140,16 @@ function _controller(_m) {
         currentPlaylist: undefined
     }
 
+    function getPlaylistId(uri) {
+        const items = uri.split(':')
+        const lastItem = items.length - 1
+        return items[lastItem]
+    }
+
+    function getIdFromUri() {
+        return getPlaylistId(state.currentPlaylist)
+    }
+
     return {
         currentPlaylist: _ => {
             if (!_) return state.currentPlaylist
@@ -137,7 +158,7 @@ function _controller(_m) {
         },
         getPlaylists: data => model.postJSON('/playlists', data),
         getTracks: (title, year) => model.getJSON(`/tracks/${title}?year=${year}`),
-        addTrackToPlaylist: track => model.putJSON(`/playlists/${state.currentPlaylist}/tracks/${track}`)
+        addTrackToPlaylist: track => model.putJSON(`/playlists/${getIdFromUri()}/tracks/${encodeURIComponent(track)}`)
     }
 }
 

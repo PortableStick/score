@@ -55,7 +55,7 @@ app.use('/healthCheck', healthCheck)
 app.use('/callback', callback)
 app.use('/logout', logout)
 app.use('/tracks', getUserData, tracks)
-app.use('/playlist', getUserData, playlist)
+app.use('/playlists', getUserData, playlist)
 app.use('/', getUserData, getUserPlaylists, index)
 
 // catch 404 and forward to error handler

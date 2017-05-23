@@ -22,7 +22,7 @@ function createPlaylist(token, body, user) {
 }
 
 function addTrackToPlaylist(token, user, playlistId, trackId) {
-    return postToSpotify(token, `users/${user.id}/playlists/${playlistId}/tracks`, null, [{ name: 'uri', value: trackId }])
+    return postToSpotify(token, `users/${user.id}/playlists/${playlistId}/tracks`, null, [{ name: 'uris', value: trackId }])
 }
 
 function getAlbums(token, title, year) {
