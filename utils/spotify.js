@@ -5,8 +5,8 @@ function getFromSpotify(token, url) {
     return getJSON(`${SPOTIFY_URL}${url}`, null, { 'Authorization': `Bearer ${token}` })
 }
 
-function postToSpotify(token, url, body) {
-    return postJSON(`${SPOTIFY_URL}${url}`, body, null, { 'Authorization': `Bearer ${token}` })
+function postToSpotify(token, url, body, queries) {
+    return postJSON(`${SPOTIFY_URL}${url}`, body, queries, { 'Authorization': `Bearer ${token}` })
 }
 
 function getUser(token) {
@@ -19,6 +19,10 @@ function getPlaylists(token) {
 
 function createPlaylist(token, body, user) {
     return postToSpotify(token, `users/${user.id}/playlists`, body)
+}
+
+function addTrackToPlaylist(token, user, playlistId, trackId) {
+    return postToSpotify(token, `users/${user.id}/playlists/${playlistId}/tracks`, null, [{ name: 'uri', value: trackId }])
 }
 
 function getAlbums(token, title, year) {
@@ -39,4 +43,4 @@ function refreshToken(refresh_token) {
     return postFormData(`${SPOTIFY_REFRESH_URL}`, refreshBody, null, { 'Authorization': `Basic ${encodedSecret}` })
 }
 
-module.exports = { getUser, getPlaylists, createPlaylist, refreshToken, getAlbums, getTracks }
+module.exports = { getUser, getPlaylists, createPlaylist, refreshToken, getAlbums, getTracks, addTrackToPlaylist }

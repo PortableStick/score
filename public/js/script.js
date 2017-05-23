@@ -1,43 +1,55 @@
+'use strict'
 $(document).ready(function() {
-    const view = _view()
+    const model = _model()
+    const controller = _controller(model)
+    const view = _view(controller)
     view.init()
 });
 
-function _view() {
+function _view(_c) {
+    // any title shorter than this are difficult to get good results for
+    const SHORTTITLE = 7
+    const controller = _c
     const playlistName = $('#new-playlist-name')
     const playlistDescription = $('#new-playlist-description')
     const playlists = $('#playlists')
     const playlistForm = $('#playlist-form')
     const optionTemplate = Handlebars.compile('<option value={{uri}} selected="selected">{{name}}</option>')
     const playlistWidgetTemplate = Handlebars.compile('<iframe src="https://open.spotify.com/embed?theme=white&uri={{uri}}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>')
-    const albumTitleTemplate = Handlebars.compile('{{#each albums}}<li class="collection-header">{{name}}</li>{{#each tracks}}<li class="collection-item"><span>{{track_number}} - {{name}}</span></li>{{/each}}{{/each}}')
+    const albumTitleTemplate = Handlebars.compile('{{#each albums}}<li class="collection-header">{{name}}</li>{{#each tracks}}<li class="collection-item row" data-id={{id}}><span class="col s10">{{track_number}} - {{name}}</span><button type="button" class="waves-effect waves-teal btn-flat secondary-content col s2">+</button></li>{{/each}}{{/each}}')
     const playlistModal = $('#playlist-modal')
     const widget = $('#widget')
-    const albumWidget = $('#album')
+    const trackAndAlbumList = $('#album')
+
+    function updatePlaylistWidget() {
+        const newPlaylist = playlistWidgetTemplate({ uri: controller.currentPlaylist() })
+        widget.html(newPlaylist)
+    }
+
+    function setCurrentPlaylist(uri) {
+        controller.currentPlaylist(uri)
+        updatePlaylistWidget()
+    }
 
     function soundtrackify(title) {
-        return title.length < 7 && title.search(/(original score)|(original motion picture soundtrack)/gi) === -1 ? encodeURIComponent(`${title} soundtrack`) : encodeURIComponent(title)
+        return title.length < SHORTTITLE && title.search(/(original score)|(original motion picture soundtrack)/gi) === -1 ? encodeURIComponent(`${title} soundtrack`) : encodeURIComponent(title)
     }
 
     function populateTracks(currentMovie) {
         const title = soundtrackify(currentMovie.data('title'))
         const year = currentMovie.data('release-date').slice(0, 4)
-        fetch(`/tracks/${title}?year=${year}`, { credentials: 'same-origin' })
-            .then(response => {
-                if (response.ok) return response.json()
-                Promise.reject(response)
-            })
+        controller.getTracks(title, year)
             .then(albums => {
                 if (albums.length) {
                     const trackList = albumTitleTemplate({ albums })
-                    albumWidget.html(trackList)
+                    trackAndAlbumList.html(trackList)
                 } else {
-                    albumWidget.html('<li class="collection-header">There doesn\'t seem to be any albums for this movie</li>')
+                    trackAndAlbumList.html('<li class="collection-header">There doesn\'t seem to be any albums for this movie</li>')
                 }
 
             })
             .catch(error => {
-
+                console.error(error)
             })
     }
 
@@ -48,7 +60,7 @@ function _view() {
             populateTracks(currentMovie)
         })
 
-        $('.coverflow').on('beforeChange', () => albumWidget.html('<li class="collection-item"><div class="progress"><div class="indeterminate"></div></div></li>'))
+        $('.coverflow').on('beforeChange', () => trackAndAlbumList.html('<li class="collection-item"><div class="progress"><div class="indeterminate"></div></div></li>'))
 
         $('.coverflow').on('afterChange', (event, slick, slide) => {
             const currentMovie = $(`#movie-${slide}`)
@@ -83,27 +95,21 @@ function _view() {
                 prev[curr.name] = curr.value
                 return prev
             }, {})
-            fetch('/playlist', { method: 'POST', body: JSON.stringify(formData), headers: { 'content-type': 'application/json' }, credentials: 'same-origin' })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json()
-                    }
-                    return Promise.reject(error)
-                })
+            controller.getPlaylists(formData)
                 .then(data => {
                     playlists.prepend(optionTemplate(data))
                     playlists.material_select()
                     playlistModal.modal('close')
                 })
                 .catch(error => {
-                    // TODO:
-                    // - handle errors
+                    console.error(error)
+                        // TODO:
+                        // - handle errors
                 })
         })
 
         playlists.change(function(event) {
-            const newPlaylist = playlistWidgetTemplate({ uri: event.target.selectedOptions[0].value })
-            widget.html(newPlaylist)
+            setCurrentPlaylist(event.target.selectedOptions[0].value)
         })
 
         //stuff for materialize
@@ -112,6 +118,50 @@ function _view() {
         $('select').material_select()
         $('#new-playlist-description').trigger('autoresize')
         playlistModal.modal()
+        setCurrentPlaylist(playlists[0].selectedOptions[0].value)
     }
     return { init }
+}
+
+function _controller(_m) {
+    const model = _m
+    const state = {
+        currentPlaylist: undefined
+    }
+
+    return {
+        currentPlaylist: _ => {
+            if (!_) return state.currentPlaylist
+            state.currentPlaylist = _
+            return state.currentPlaylist
+        },
+        getPlaylists: data => model.postJSON('/playlists', data),
+        getTracks: (title, year) => model.getJSON(`/tracks/${title}?year=${year}`),
+        addTrackToPlaylist: track => model.putJSON(`/playlists/${state.currentPlaylist}/tracks/${track}`)
+    }
+}
+
+function _model(_c) {
+    const controller = _c
+
+    function handleResponse(response) {
+        if (response.ok) return response.json()
+        return Promise.reject(response)
+    }
+
+    function postJSON(url, body) {
+        return fetch(url, { method: 'POST', body: JSON.stringify(body), headers: { 'content-type': 'application/json' }, credentials: 'same-origin' })
+            .then(handleResponse)
+    }
+
+    function getJSON(url) {
+        return fetch(url, { credentials: 'same-origin' })
+            .then(handleResponse)
+    }
+
+    function putJSON(url) {
+        return fetch(url, { method: 'PUT', credentials: 'same-origin' })
+    }
+
+    return { postJSON, getJSON, putJSON }
 }
