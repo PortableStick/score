@@ -1,0 +1,6 @@
+select#playlists
+    each playlist, index in user.playlists
+        option(value=playlist.uri, selected=index === 0 ? true : false)=playlist.name
+label Playlists
+button.btn.waves-effect.waves-light(data-target="playlist-modal") New Playlist
+#widget

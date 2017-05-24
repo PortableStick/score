@@ -1,0 +1,9 @@
+ul#mobile.side-nav
+    if user
+      li
+        a(href="#!") Logged in as #{user.display_name || user.id}
+      li
+        a.waves-effect.waves-light.btn(href="/logout") Sign Out
+    else
+      li
+        a(href="/connect/spotify") Login via Spotify

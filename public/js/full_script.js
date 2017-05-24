@@ -43,7 +43,7 @@ function _view(_c) {
                 if (albums.length) {
                     const trackList = albumTitleTemplate({ albums })
                     trackAndAlbumList.html(trackList)
-                    $('.tooltipped').tooltip({delay: 1000, tooltip: "Add to playlist", position: "right"})
+                    $('.tooltipped').tooltip({ delay: 1000, tooltip: "Add to playlist", position: "right" })
                 } else {
                     trackAndAlbumList.html('<li class="collection-header">There doesn\'t seem to be any albums for this movie</li>')
                 }
@@ -59,6 +59,7 @@ function _view(_c) {
         $('.coverflow').on('init', (event, slick) => {
             const currentMovie = $(`#movie-${slick.currentSlide}`)
             populateTracks(currentMovie)
+            $('.display').removeClass('hidden')
         })
 
         $('.coverflow').on('beforeChange', () => trackAndAlbumList.html('<li class="collection-item"><div class="progress"><div class="indeterminate"></div></div></li>'))
@@ -93,9 +94,12 @@ function _view(_c) {
             controller.addTrackToPlaylist($(event.target).data('uri'))
                 .then(data => {
                     updatePlaylistWidget()
-                    Materialize.toast('Added to playlist', 6000)
+                    Materialize.toast('<div class="success">Added to playlist</div>', 6000)
                 })
-                .catch(error => console.error(error))
+                .catch(error => {
+                    console.error(error)
+                    Materialize.toast('<div class="problem">There was a problem adding that track</div>', 6000)
+                })
         })
 
         playlistForm.submit(function(event) {
@@ -113,8 +117,7 @@ function _view(_c) {
                 })
                 .catch(error => {
                     console.error(error)
-                        // TODO:
-                        // - handle errors
+                    playlists.prepend('<option value="" disabled>There was a problem</option>')
                 })
         })
 
@@ -125,6 +128,7 @@ function _view(_c) {
         //stuff for materialize
         $('.dropdown-button').dropdown()
         $('.button-collapse').sideNav()
+
         $('select').material_select()
         $('#new-playlist-description').trigger('autoresize')
         playlistModal.modal()

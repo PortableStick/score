@@ -1,83 +1,25 @@
 extends layout
 
 block content
-  .navbar-fixed
-    nav
-      .nav-wrapper
-        a(href="#").brand-logo Score
-        a.button-collapse(href="#", data-activates="mobile")
-          i.material-icons menu
-        ul.right.hide-on-med-and-down
-          if user
-            li
-              a(href="#!", class="dropdown-button" data-activates="user-dropdown")
-                span.nav-logged Logged in as
-                  span.username  #{user.display_name || user.id}
-                i.material-icons.right arrow_drop_down
-          else
-            li
-              a(href="/connect/spotify") Login via Spotify
+  include includes/navbar.pug
   main.container
-    .display
-      section.coverflow
-        each movie, index in movies
-          .coverflow-item.card.large(id=`movie-${index}`, data-title=movie.title, data-release-date=movie.release_date)
-            .card-image.waves-effect.waves-block.waves-light
-              img.activator.hide-on-small-only(src=bdurl + movie.backdrop_path)
-              img.activator.hide-on-med-and-up.poster(src=bdurl + movie.poster_path)
-            .card-content
-              .card-title.activator.grey-text=movie.title
-            .card-reveal
-              .card-title=movie.title
-                i.material-icons.right close
-              p.grey-text.text-darken-1=movie.overview
+    .display.hidden
+      include includes/coverflow.pug
     if user
       .row
         .col.m6.s12
-          ul.collection.with-header#album
-            li.collection-item
-              .progress
-                .indeterminate
+          include includes/tracklist.pug
         .input-field.col.m6.s12
-          select#playlists
-            each playlist, index in user.playlists
-              option(value=playlist.uri, selected=index === 0 ? true : false)=playlist.name
-          label Playlists
-          button.btn.waves-effect.waves-light(data-target="playlist-modal") New Playlist
-          #widget
-  footer.page-footer
-    .row
-      a.col.s6(href="https://www.themoviedb.org")
-        img.attribution(type="image/svg+xm", src="/images/powered-by-rectangle-blue.svg", alt="Powered by TMDB")
+          include includes/playlist.pug
+  include includes/footer.pug
   if user
     ul#user-dropdown.dropdown-content
       li
         a(href="/logout") Sign Out
-  ul#mobile.side-nav
-    if user
-      li
-        a(href="#!") Logged in as #{user.display_name || user.id}
-      li
-        a.waves-effect.waves-light.btn(href="/logout") Sign Out
-    else
-      li
-        a(href="/connect/spotify") Login via Spotify
-  #playlist-modal.modal
-    .modal-content
-      h4 Create a New Playlist
-      form#playlist-form
-        .input-field
-          input(name="name", id="new-playlist-name", type="text", required)
-          label(for="new-playlist-name") Playlist Name
-        .input-field
-          textarea.materialize-textarea#new-playlist-description(name="description")
-          label(for="new-playlist-description") Playlist description (optional)
-        .row
-          .col.sm3
-            input(name="public", id="public-check", type="checkbox", value="true", checked="checked")
-            label(for="public-check") Public?
-          .col.sm3.push-s3
-            button.waves-effect.waves-light.btn#create(type="submit") Create
-              i.material-icons.right send
-          .col.sm3.push-s3
-            button.waves-effect.waves-light.btn.modal-close.red(type="button") Cancel
+  include includes/sidenav.pug
+  include includes/modal.pug
+  include includes/scripts.pug
+  if user
+    script(src="/js/full_script.js")
+  else
+    script(src="/js/short_script.js")

@@ -1,0 +1,19 @@
+#playlist-modal.modal
+    .modal-content
+      h4 Create a New Playlist
+      form#playlist-form
+        .input-field
+          input(name="name", id="new-playlist-name", type="text", required)
+          label(for="new-playlist-name") Playlist Name
+        .input-field
+          textarea.materialize-textarea#new-playlist-description(name="description")
+          label(for="new-playlist-description") Playlist description (optional)
+        .row
+          .col.sm3
+            input(name="public", id="public-check", type="checkbox", value="true", checked="checked")
+            label(for="public-check") Public?
+          .col.sm3.push-s3
+            button.waves-effect.waves-light.btn#create(type="submit") Create
+              i.material-icons.right send
+          .col.sm3.push-s3
+            button.waves-effect.waves-light.btn.modal-close.red(type="button") Cancel

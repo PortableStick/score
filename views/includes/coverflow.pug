@@ -1,0 +1,12 @@
+section.coverflow
+        each movie, index in movies
+          .coverflow-item.card.large(id=`movie-${index}`, data-title=movie.title, data-release-date=movie.release_date)
+            .card-image.waves-effect.waves-block.waves-light
+              img.activator.hide-on-small-only(src=bdurl + movie.backdrop_path)
+              img.activator.hide-on-med-and-up.poster(src=bdurl + movie.poster_path)
+            .card-content
+              .card-title.activator.grey-text=movie.title
+            .card-reveal
+              .card-title=movie.title
+                i.material-icons.right close
+              p.grey-text.text-darken-1=movie.overview
