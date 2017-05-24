@@ -13,9 +13,7 @@ block content
           include includes/playlist.pug
   include includes/footer.pug
   if user
-    ul#user-dropdown.dropdown-content
-      li
-        a(href="/logout") Sign Out
+    include includes/userSignout.pug
   include includes/sidenav.pug
   include includes/modal.pug
   include includes/scripts.pug
