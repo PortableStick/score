@@ -1,7 +1,7 @@
 const path = require('path')
 const DEVELOPMENT = process.env.NODE_ENV === 'development'
 
-const API_URL = DEVELOPMENT ? `http://localhost:${process.env.PORT || 3000}` : 'https://damp-garden-62543.herokuapp.com'
+const API_URL = DEVELOPMENT ? `http://localhost:${process.env.PORT || 3000}` : 'https://get-score.herokuapp.com'
 const MONGO_URL = DEVELOPMENT ? 'mongodb://localhost:27017/spotify_integration_development' : process.env.MONGODB_URI
 const SESSION_SECRET = process.env.SESSION_SECRET || 'secret'
 
@@ -56,7 +56,9 @@ const SASSCONFIG = {
     outputStyle: DEVELOPMENT ? 'expanded' : 'compressed'
 }
 
+const REDIS_CONFIG = DEVELOPMENT ? { hostname: 'localhost', port: '6379', auth: 'username:password' } : require("url").parse(process.env.REDISTOGO_URL)
 module.exports = {
+    REDIS_CONFIG,
     DEVELOPMENT,
     MONGO_URL,
     SASSCONFIG,

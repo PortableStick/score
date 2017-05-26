@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const Grant = require('grant-express');
 const session = require('express-session')
-const redisClient = require('redis').createClient()
 const RedisStore = require('connect-redis')(session)
 const mongoose = require('mongoose')
 const sassMiddleware = require('node-sass-middleware')
@@ -17,7 +16,9 @@ const refresh = require('./routes/refresh')
 const playlist = require('./routes/playlist')
 const tracks = require('./routes/tracks')
 const app = express();
-const { SESSION_SECRET, MONGO_URL, SASSCONFIG } = require('./constants')
+const { SESSION_SECRET, MONGO_URL, SASSCONFIG, REDIS_CONFIG } = require('./constants')
+const redisClient = require('redis').createClient(REDIS_CONFIG.port, REDIS_CONFIG.hostname)
+redisClient.auth(REDIS_CONFIG.auth.split(":")[1])
 const GRANT_CONFIG = require('./grantConfig')
 
 const grant = new Grant(GRANT_CONFIG[process.env.NODE_ENV || 'production']);
@@ -28,11 +29,6 @@ const callback = require('./routes/callback')
 const index = require('./routes/index')
 const about = require('./routes/about')
 
-const redisStoreOptions = {
-    client: redisClient,
-    port: 6379,
-    host: 'localhost'
-}
 mongoose.Promise = global.Promise
 mongoose.connect(MONGO_URL)
     // view engine setup
@@ -46,7 +42,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(session({ secret: SESSION_SECRET, saveUninitialized: true, resave: true, store: new RedisStore(redisStoreOptions) }))
+app.use(session({ secret: SESSION_SECRET, saveUninitialized: true, resave: true, store: new RedisStore(redisClient) }))
 app.use(grant)
 
 
