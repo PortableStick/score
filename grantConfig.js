@@ -1,4 +1,4 @@
-const SPOTIFY_CONFIG = require('./constants').SPOTIFY_CONFIG;
+const { SPOTIFY_CONFIG, HOSTNAME } = require('./constants');
 
 module.exports = {
     "development": {
@@ -13,8 +13,7 @@ module.exports = {
     "production": {
         "server": {
             "protocol": "https",
-            "host": "",
-            "callback": "/callback",
+            "host": HOSTNAME,
             "transport": "session",
             "state": true
         },
