@@ -1,1 +1,1 @@
-web: npm run start
+web: ./bin/populate_movies && npm run start
