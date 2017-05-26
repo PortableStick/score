@@ -1,7 +1,7 @@
 const { getUser } = require('../utils/spotify')
 
 function getUserData(request, response, next) {
-    const token = request.session.grant ? request.session.grant.response.access_token : undefined
+    const token = request.session.grant && request.session.grant.response ? request.session.grant.response.access_token : undefined
     if (token) {
         getUser(token)
             .then(user => {
