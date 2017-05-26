@@ -1,10 +1,12 @@
 .navbar-fixed
     nav
       .nav-wrapper
-        a(href="#").brand-logo Score
+        a(href="/").brand-logo Score
         a.button-collapse(href="#", data-activates="mobile")
           i.material-icons menu
         ul.right.hide-on-med-and-down
+          li
+            a(href="/about") About
           if user
             li
               a(href="#!", class="dropdown-button" data-activates="user-dropdown")
@@ -12,5 +14,12 @@
                   span.username  #{user.display_name || user.id}
                 i.material-icons.right arrow_drop_down
           else
-            li
+            li#login
               a(href="/connect/spotify") Login via Spotify
+.tap-target(data-activates="login")
+  .tap-target-content
+    h5 Login to Spotify!
+    p Use of this app requires that you're logged into Spotify
+
+if user
+    include ./userSignout.pug

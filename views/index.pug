@@ -11,9 +11,9 @@ block content
           include includes/tracklist.pug
         .input-field.col.m6.s12
           include includes/playlist.pug
+    else
+      include includes/intro.pug
   include includes/footer.pug
-  if user
-    include includes/userSignout.pug
   include includes/sidenav.pug
   include includes/modal.pug
   include includes/scripts.pug

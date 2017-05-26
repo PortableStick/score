@@ -26,6 +26,7 @@ const grant = new Grant(GRANT_CONFIG[process.env.NODE_ENV || 'production']);
 const healthCheck = require('./routes/healthCheck')
 const callback = require('./routes/callback')
 const index = require('./routes/index')
+const about = require('./routes/about')
 
 const redisStoreOptions = {
     client: redisClient,
@@ -56,6 +57,7 @@ app.use('/callback', callback)
 app.use('/logout', logout)
 app.use('/tracks', getUserData, tracks)
 app.use('/playlists', getUserData, playlist)
+app.use('/about', getUserData, about)
 app.use('/', getUserData, getUserPlaylists, index)
 
 // catch 404 and forward to error handler
