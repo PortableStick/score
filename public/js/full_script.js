@@ -134,7 +134,7 @@ function _view(_c) {
             controller.getPlaylists(formData)
                 .then(data => {
                     if (playlists[0].options[0].value === "") {
-                        playlists.empty()
+                        playlists.empty().removeAttr('disabled')
                     }
                     playlists.prepend(optionTemplate(data))
                     playlistModal.modal('close')

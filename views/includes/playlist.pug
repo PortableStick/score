@@ -1,4 +1,4 @@
-select#playlists
+select#playlists(disabled=user.playlists.length === 0)
     if user.playlists.length !== 0
         each playlist, index in user.playlists
             option(value=playlist.uri, selected=index === 0 ? true : false)=playlist.name
