@@ -29,6 +29,7 @@ function _view(_c) {
     }
 
     function updatePlaylistWidget() {
+        if (!controller.currentPlaylist()) { return }
         const newPlaylist = playlistWidgetTemplate({ uri: controller.currentPlaylist() })
         widget.html(newPlaylist)
     }
@@ -108,6 +109,10 @@ function _view(_c) {
         })
 
         trackAndAlbumList.on('click', '.add-to-list', event => {
+            if (!playlists[0].length) {
+                Materialize.toast('<div class="problem">You need to create a playlist</div>', 3000)
+                return;
+            }
             controller.addTrackToPlaylist($(event.target).data('uri'))
                 .then(data => {
                     updatePlaylistWidget()
@@ -129,6 +134,9 @@ function _view(_c) {
             resetForm()
             controller.getPlaylists(formData)
                 .then(data => {
+                    if (playlists[0].options[0].value === "") {
+                        playlists.empty()
+                    }
                     playlists.prepend(optionTemplate(data))
                     playlistModal.modal('close')
                     resetPlaylistSelection()
@@ -151,7 +159,9 @@ function _view(_c) {
         $('#new-playlist-description').trigger('autoresize')
         playlistModal.modal()
 
-        setCurrentPlaylist(playlists[0].selectedOptions[0].value)
+        if (playlists[0].length && playlists[0].options[0].value !== '') {
+            setCurrentPlaylist(playlists[0].selectedOptions[0].value)
+        }
     }
     return { init }
 }

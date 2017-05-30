@@ -1,6 +1,9 @@
 select#playlists
-    each playlist, index in user.playlists
-        option(value=playlist.uri, selected=index === 0 ? true : false)=playlist.name
+    if user.playlists.length !== 0
+        each playlist, index in user.playlists
+            option(value=playlist.uri, selected=index === 0 ? true : false)=playlist.name
+    else
+        option(value="", disabled=true) Please create a playlist
 label Playlists
 button.btn.waves-effect.waves-light.indigo.darken-1(data-target="playlist-modal") New Playlist
 #widget
