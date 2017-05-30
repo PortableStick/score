@@ -109,9 +109,8 @@ function _view(_c) {
         })
 
         trackAndAlbumList.on('click', '.add-to-list', event => {
-            if (!playlists[0].length) {
-                Materialize.toast('<div class="problem">You need to create a playlist</div>', 3000)
-                return;
+            if (playlists[0].length === 1 && playlists[0].options[0].value === '') {
+                return Materialize.toast('<div class="problem">You need to create a playlist</div>', 3000)
             }
             controller.addTrackToPlaylist($(event.target).data('uri'))
                 .then(data => {
