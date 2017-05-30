@@ -7,7 +7,7 @@ template#next-button
 template#playlist-widget
     iframe(src="https://open.spotify.com/embed?theme=white&uri={{uri}}",width="300",height="380",frameborder="0",allowtransparency="true")
 template#option-template
-    option(value='{{url}}') {{name}}
+    option(value='{{uri}}') {{name}}
 template#album-template
     | {{#each albums}}
     li.collection-header.indigo.darken-2.white-text {{name}}

@@ -14,7 +14,7 @@ function _view(_c) {
     const playlistDescription = $('#new-playlist-description')
     const playlists = $('#playlists')
     const playlistForm = $('#playlist-form')
-    const optionTemplate = $('#option-template')
+    const optionTemplate = Handlebars.compile($('#option-template').html())
     const playlistWidgetTemplate = Handlebars.compile($('#playlist-widget').html())
     const albumTitleTemplate = Handlebars.compile($('#album-template').html())
     const playlistModal = $('#playlist-modal')
@@ -33,6 +33,15 @@ function _view(_c) {
 
     function soundtrackify(title) {
         return title.length < SHORTTITLE ? encodeURIComponent(`${title} soundtrack`) : encodeURIComponent(title)
+    }
+
+    function resetPlaylistSelection() {
+        $('#playlists option:selected').removeAttr("selected")
+        $('#playlists option').first().attr('selected', 'selected')
+        playlists.val($('#playlists option').first().val())
+        playlists.material_select()
+        setCurrentPlaylist($('#playlists option').first().val())
+        updatePlaylistWidget()
     }
 
     function populateTracks(currentMovie) {
@@ -112,8 +121,9 @@ function _view(_c) {
             controller.getPlaylists(formData)
                 .then(data => {
                     playlists.prepend(optionTemplate(data))
-                    playlists.material_select()
                     playlistModal.modal('close')
+                    resetPlaylistSelection()
+                    playlists.material_select()
                 })
                 .catch(error => {
                     console.error(error)
@@ -170,6 +180,7 @@ function _model(_c) {
 
     function handleResponse(response) {
         if (response.ok) return response.json()
+        debugger
         return Promise.reject(response)
     }
 
