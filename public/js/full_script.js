@@ -20,6 +20,13 @@ function _view(_c) {
     const playlistModal = $('#playlist-modal')
     const widget = $('#widget')
     const trackAndAlbumList = $('#album')
+    const newPlaylistName = $('#new-playlist-name')
+    const newPlaylistDescription = $('#new-playlist-description')
+
+    function resetForm() {
+        newPlaylistName.val('')
+        newPlaylistDescription.val('')
+    }
 
     function updatePlaylistWidget() {
         const newPlaylist = playlistWidgetTemplate({ uri: controller.currentPlaylist() })
@@ -36,11 +43,12 @@ function _view(_c) {
     }
 
     function resetPlaylistSelection() {
+        const options = $('#playlists option');
         $('#playlists option:selected').removeAttr("selected")
-        $('#playlists option').first().attr('selected', 'selected')
-        playlists.val($('#playlists option').first().val())
+        options.first().attr('selected', 'selected')
+        playlists.val(options.first().val())
         playlists.material_select()
-        setCurrentPlaylist($('#playlists option').first().val())
+        setCurrentPlaylist(options.first().val())
         updatePlaylistWidget()
     }
 
@@ -118,6 +126,7 @@ function _view(_c) {
                 prev[curr.name] = curr.value
                 return prev
             }, {})
+            resetForm()
             controller.getPlaylists(formData)
                 .then(data => {
                     playlists.prepend(optionTemplate(data))
