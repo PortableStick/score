@@ -69,6 +69,9 @@ nav .brand-logo {
 #album {
     height: 500px;
     overflow-y: scroll;
+    @media screen and (max-width: 600px) {
+        height: 200px;
+    }
 }
 
 .toast {

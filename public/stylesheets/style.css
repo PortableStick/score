@@ -69,6 +69,12 @@ main {
   overflow-y: scroll;
 }
 
+@media screen and (max-width: 600px) {
+  #album {
+    height: 200px;
+  }
+}
+
 .toast {
   padding: 0;
   min-height: 0;
