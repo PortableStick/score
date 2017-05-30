@@ -35,11 +35,11 @@ main {
 }
 
 .next {
-  left: -60px;
+  right: -60px;
 }
 
 .previous {
-  right: -60px;
+  left: -60px;
 }
 
 .btn.btn-large {
@@ -97,10 +97,20 @@ main {
   list-style: none;
 }
 
+@media screen and (max-width: 991px) {
+  .tap-target-origin {
+    display: none;
+  }
+}
+
 .tap-target-content {
   color: white;
 }
 
 .text-center {
   text-align: center;
+}
+
+#dismiss {
+  cursor: pointer;
 }

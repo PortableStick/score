@@ -1,4 +1,5 @@
 $buttonOffset: -60px;
+$progress-bar-color: #3f51b5;
 .container {
     margin-top: 30px;
 }
@@ -36,11 +37,11 @@ main {
 }
 
 .next {
-    left: $buttonOffset;
+    right: $buttonOffset;
 }
 
 .previous {
-    right: $buttonOffset;
+    left: $buttonOffset;
 }
 
 .btn.btn-large {
@@ -97,6 +98,9 @@ nav .brand-logo {
 
 .tap-target-origin {
     list-style: none;
+    @media screen and (max-width: 991px) {
+        display: none;
+    }
 }
 
 .tap-target-content {
@@ -105,4 +109,8 @@ nav .brand-logo {
 
 .text-center {
     text-align: center;
+}
+
+#dismiss {
+    cursor: pointer;
 }

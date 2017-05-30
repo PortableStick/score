@@ -1,6 +1,6 @@
 .navbar-fixed
     nav
-      .nav-wrapper
+      .nav-wrapper.indigo.darken-4
         a(href="/").brand-logo Score
         a.button-collapse(href="#", data-activates="mobile")
           i.material-icons menu
@@ -20,6 +20,7 @@
   .tap-target-content
     h5 Login to Spotify!
     p Use of this app requires that you're logged into Spotify
+    p#dismiss [dissmiss]
 
 if user
     include ./userSignout.pug

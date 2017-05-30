@@ -1,0 +1,25 @@
+template#prev-button
+    button.btn.btn-large.previous.indigo.darken-1(type="button")
+        i.material-icons skip_previous
+template#next-button
+    button.btn.btn-large.next.indigo.darken-1(type="button")
+        i.material-icons skip_next
+template#playlist-widget
+    iframe(src="https://open.spotify.com/embed?theme=white&uri={{uri}}",width="300",height="380",frameborder="0",allowtransparency="true")
+template#option-template
+    option(value='{{url}}') {{name}}
+template#album-template
+    | {{#each albums}}
+    li.collection-header.indigo.darken-2.white-text {{name}}
+        | {{#each tracks}}
+        li.collection-item.row(data-id='{{id}}')
+            span.col.s10 {{track_number}} - {{name}}
+            button.tooltipped.waves-effect.waves-teal.btn-flat.secondary-content.col.s2.add-to-list(type="button" data-uri="${'{{uri}}'}'") +
+        | {{/each}}
+    | {{/each}}
+template#progress-template
+    li.collection-item
+        .progress
+            .indeterminate
+template#empty-track-template
+    li.collection-header There doesn't seem to be any albums for this movie

@@ -12,8 +12,8 @@ $(document).ready(() => {
             dots: true,
             autoplay: true,
             autoplaySpeed: 3000,
-            prevArrow: '<button type="button" class="btn btn-large next"><i class="material-icons">skip_previous</i></button>',
-            nextArrow: '<button type="button" class="btn btn-large previous"><i class="material-icons">skip_next</i></button>',
+            prevArrow: $('#prev-button').html(),
+            nextArrow: $('#next-button').html(),
             responsive: [{
                     breakpoint: 768,
                     settings: {
@@ -34,4 +34,6 @@ $(document).ready(() => {
         setTimeout(() => $('.tap-target').tapTarget('open'), 3500)
         localStorage.beenHereBefore = true
     }
+
+    $('#dismiss').click(e => $('.tap-target').tapTarget('close'))
 })

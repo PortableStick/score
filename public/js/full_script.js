@@ -14,9 +14,9 @@ function _view(_c) {
     const playlistDescription = $('#new-playlist-description')
     const playlists = $('#playlists')
     const playlistForm = $('#playlist-form')
-    const optionTemplate = Handlebars.compile('<option value={{uri}} selected="selected">{{name}}</option>')
-    const playlistWidgetTemplate = Handlebars.compile('<iframe src="https://open.spotify.com/embed?theme=white&uri={{uri}}" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>')
-    const albumTitleTemplate = Handlebars.compile('{{#each albums}}<li class="collection-header">{{name}}</li>{{#each tracks}}<li class="collection-item row" data-id={{id}}><span class="col s10">{{track_number}} - {{name}}</span><button type="button" class="tooltipped waves-effect waves-teal btn-flat secondary-content col s2 add-to-list" data-uri="{{uri}}">+</button></li>{{/each}}{{/each}}')
+    const optionTemplate = $('#option-template')
+    const playlistWidgetTemplate = Handlebars.compile($('#playlist-widget').html())
+    const albumTitleTemplate = Handlebars.compile($('#album-template').html())
     const playlistModal = $('#playlist-modal')
     const widget = $('#widget')
     const trackAndAlbumList = $('#album')
@@ -45,7 +45,7 @@ function _view(_c) {
                     trackAndAlbumList.html(trackList)
                     $('.tooltipped').tooltip({ delay: 1000, tooltip: "Add to playlist", position: "right" })
                 } else {
-                    trackAndAlbumList.html('<li class="collection-header">There doesn\'t seem to be any albums for this movie</li>')
+                    trackAndAlbumList.html($('#empty-track-template').html())
                 }
 
             })
@@ -62,7 +62,7 @@ function _view(_c) {
             $('.display').removeClass('hidden')
         })
 
-        $('.coverflow').on('beforeChange', () => trackAndAlbumList.html('<li class="collection-item"><div class="progress"><div class="indeterminate"></div></div></li>'))
+        $('.coverflow').on('beforeChange', () => trackAndAlbumList.html($('#progress-template').html()))
 
         $('.coverflow').on('afterChange', (event, slick, slide) => {
             const currentMovie = $(`#movie-${slide}`)
@@ -72,8 +72,8 @@ function _view(_c) {
         $('.coverflow').slick({
             slidesToShow: 1,
             dots: true,
-            prevArrow: '<button type="button" class="btn btn-large next"><i class="material-icons">skip_previous</i></button>',
-            nextArrow: '<button type="button" class="btn btn-large previous"><i class="material-icons">skip_next</i></button>',
+            prevArrow: $('#prev-button').html(),
+            nextArrow: $('#next-button').html(),
             responsive: [{
                     breakpoint: 768,
                     settings: {
@@ -128,7 +128,6 @@ function _view(_c) {
         //stuff for materialize
         $('.dropdown-button').dropdown()
         $('.button-collapse').sideNav()
-
         $('select').material_select()
         $('#new-playlist-description').trigger('autoresize')
         playlistModal.modal()
