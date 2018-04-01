@@ -1,17 +1,17 @@
-const { getPlaylists } = require("../utils/spotify")
+const { getPlaylists } = require('../utils/spotify');
 
 function getUserPlaylists(request, response, next) {
-    const token = request.session.grant && request.session.grant.response ? request.session.grant.response.access_token : undefined
+    const token = request.session.grant && request.session.grant.response ? request.session.grant.response.access_token : undefined;
     if (token) {
         getPlaylists(token)
             .then(data => {
-                request.user.playlists = data.items
-                next()
+                request.user.playlists = data.items;
+                next();
             })
-            .catch(error => console.error(error))
+            .catch(error => console.error(error));
     } else {
-        next()
+        next();
     }
 }
 
-module.exports = getUserPlaylists
+module.exports = getUserPlaylists;

@@ -1,20 +1,20 @@
 #!/usr/bin/env node
 
-const { MONGO_URL } = require('../constants')
-const mongoose = require('mongoose')
-mongoose.Promise = global.Promise
-const { getPopularMovies } = require('../utils/tmdb')
-const Movie = require('../models/Movie.model')
+const { MONGO_URL } = require('../constants');
+const mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
+const { getPopularMovies } = require('../utils/tmdb');
+const Movie = require('../models/Movie.model');
 
 mongoose.connect(MONGO_URL)
-    .then(() => console.log("Clearing current movies"))
+    .then(() => console.log('Clearing current movies'))
     .then(() => Movie.deleteMany())
-    .then(() => console.log("Populating the database with movies..."))
+    .then(() => console.log('Populating the database with movies...'))
     .then(getPopularMovies)
     .then(movies => Promise.all(movies.map(movie => new Movie(movie).save())))
     .then(movies => movies.forEach(movie => console.log(`Saved ${movie.title}`)))
     .then(() => process.exit())
     .catch(err => {
-        console.error("There was an error: ", err)
-        process.exit(1)
-    })
+        console.error('There was an error: ', err);
+        process.exit(1);
+    });

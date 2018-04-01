@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const MovieSchema = new mongoose.Schema({
     poster_path: String,
@@ -15,6 +15,6 @@ const MovieSchema = new mongoose.Schema({
     vote_count: Number,
     video: Boolean,
     vote_average: Number
-})
+});
 
-module.exports = mongoose.model('Movie', MovieSchema)
+module.exports = mongoose.model('Movie', MovieSchema);

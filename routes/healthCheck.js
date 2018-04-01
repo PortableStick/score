@@ -1,5 +1,5 @@
-const router = require('express').Router()
+const router = require('express').Router();
 
-router.get('/', (request, response) => response.send("Server is up"))
+router.get('/', (request, response) => response.send('Server is up'));
 
-module.exports = router
+module.exports = router;

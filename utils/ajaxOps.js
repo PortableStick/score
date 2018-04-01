@@ -1,6 +1,6 @@
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
-const { GET_HEADERS, POST_HEADERS } = require('../constants')
+const { GET_HEADERS, POST_HEADERS } = require('../constants');
 
 /**
  * @typedef QueryObject
@@ -15,10 +15,10 @@ const { GET_HEADERS, POST_HEADERS } = require('../constants')
  * @return {string}
  */
 function createQueries(queries) {
-    if (!queries) { return '' }
+    if (!queries) { return ''; }
     return queries.map(function(query, index) {
-        return `${index === 0 ? '?' : '&'}${query.name}=${encodeURIComponent(query.value)}`
-    }).join('')
+        return `${index === 0 ? '?' : '&'}${query.name}=${encodeURIComponent(query.value)}`;
+    }).join('');
 }
 
 /**
@@ -28,9 +28,9 @@ function createQueries(queries) {
 
 function handleResponse(response) {
     if (response.ok) {
-        return Promise.resolve(response.json())
+        return Promise.resolve(response.json());
     }
-    return Promise.reject({ 'message': response.statusText, 'status': response.status })
+    return Promise.reject({ 'message': response.statusText, 'status': response.status });
 }
 
 /**
@@ -40,9 +40,8 @@ function handleResponse(response) {
  * @return {Promise}
  */
 function getJSON(url, queries = [], headers = {}) {
-    const header = Object.assign({}, GET_HEADERS, headers)
     return fetch(`${url}${createQueries(queries)}`, { headers: Object.assign({}, GET_HEADERS, headers) })
-        .then(handleResponse)
+        .then(handleResponse);
 }
 
 /**
@@ -53,7 +52,7 @@ function getJSON(url, queries = [], headers = {}) {
  */
 function postJSON(url, body, queries = [], headers = {}) {
     return fetch(`${url}${createQueries(queries)}`, { headers: Object.assign({}, POST_HEADERS, headers), body: JSON.stringify(body), method: 'POST' })
-        .then(handleResponse)
+        .then(handleResponse);
 }
 
 /**
@@ -63,12 +62,12 @@ function postJSON(url, body, queries = [], headers = {}) {
  * @return {Promise}
  */
 function postFormData(url, body, queries = [], headers = {}) {
-    let formBody = ''
+    let formBody = '';
     for (let X in body) {
-        formBody += `${formBody !== '' ? '&' : ''}${X}=${body[X]}`
+        formBody += `${formBody !== '' ? '&' : ''}${X}=${body[X]}`;
     }
     return fetch(`${url}${createQueries(queries)}`, { headers: Object.assign({}, { 'Content-Type': 'application/x-www-form-urlencoded' }, headers), body: formBody, method: 'POST' })
-        .then(handleResponse)
+        .then(handleResponse);
 }
 
-module.exports = { getJSON, postJSON, postFormData }
+module.exports = { getJSON, postJSON, postFormData };
