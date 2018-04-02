@@ -36,6 +36,14 @@ const TMDB_BACKDROP_URL = 'https://image.tmdb.org/t/p/original';
 const GET_HEADERS = {
     'Accept': 'application/json',
 };
+
+const POST_HEADERS = {
+    'Content-Type': 'application/json',
+};
+
+const DELETE_HEADERS = {
+    'Content-Type': 'application/json',
+};
 const STATEKEY = 'spotify_auth_state';
 const SPOTIFY_SCOPES = ['user-read-private', 'user-read-email', 'playlist-modify-public', 'playlist-modify-private'].join(' ');
 const SPOTIFY_CONFIG = {
@@ -62,9 +70,11 @@ module.exports = {
     HOSTNAME,
     REDIS_CONFIG,
     DEVELOPMENT,
+    DELETE_HEADERS,
     MONGO_URL,
     SASSCONFIG,
     GET_HEADERS,
+    POST_HEADERS,
     SPOTIFY_CLIENT_ID,
     SPOTIFY_CLIENT_SECRET,
     SPOTIFY_URL,

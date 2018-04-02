@@ -127,6 +127,20 @@ function _view(_c) {
                 });
         });
 
+        widget.on('click', '.playlist-delete', event => {
+            event.preventDefault();
+            const id = $(event.target).data('id');
+            controller.deleteTrackFromPlaylist(id)
+                .then(() => {
+                    Materialize.toast('<div class="success">Deleted track from playlist</div>', 6000);
+                    updatePlaylistWidget();
+                })
+                .catch(error => {
+                    console.error(error);
+                    Materialize.toast('<div class="problem">There was a problem deleting that track</div>', 6000);
+                });
+        });        
+
         playlistForm.submit(function(event) {
             event.preventDefault();
             const formData = $(this).serializeArray().reduce((prev, curr) => {
@@ -198,6 +212,7 @@ function _controller(_m) {
             };
             return model.putJSON(`/playlists/${getIdFromUri()}/tracks`, data);
         },
+        deleteTrackFromPlaylist: uri => model.deleteJSON(`/playlists/${getIdFromUri()}/tracks`, { uri }),
         getPlaylist: () => model.getJSON(`/playlists/${getIdFromUri()}`)
     }; 
 }
@@ -219,9 +234,13 @@ function _model() {
             .then(handleResponse);
     }
 
-    function putJSON(url, data = {}) {
-        return fetch(url, { method: 'PUT', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) });
+    function putJSON(url, body = {}) {
+        return fetch(url, { method: 'PUT', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
     }
 
-    return { postJSON, getJSON, putJSON };
+    function deleteJSON(url, body = {}) {
+        return fetch(url, { method: 'DELETE', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) });
+    }
+
+    return { postJSON, getJSON, putJSON, deleteJSON };
 }

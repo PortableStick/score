@@ -1,6 +1,6 @@
 require('es6-promise').polyfill();
 require('isomorphic-fetch');
-const { GET_HEADERS, POST_HEADERS } = require('../constants');
+const { GET_HEADERS, POST_HEADERS, DELETE_HEADERS } = require('../constants');
 
 /**
  * @typedef QueryObject
@@ -70,4 +70,10 @@ function postFormData(url, body, queries = [], headers = {}) {
         .then(handleResponse);
 }
 
-module.exports = { getJSON, postJSON, postFormData };
+function deleteJSON(url, body, queries = [], headers = {}) {
+    console.log(`Deleting: ${body}`)
+    return fetch(`${url}${createQueries(queries)}`, { headers: Object.assign({}, DELETE_HEADERS, headers), body: JSON.stringify(body), method: 'DELETE' })
+        .then(handleResponse);
+}
+
+module.exports = { getJSON, postJSON, postFormData, deleteJSON };

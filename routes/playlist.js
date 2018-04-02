@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createPlaylist, addTrackToPlaylist, getPlaylist } = require('../utils/spotify');
+const { createPlaylist, addTrackToPlaylist, getPlaylist, deleteTrackFromPlaylist } = require('../utils/spotify');
 
 router.get('/:playlist', (request, response) => {
     const token = request.session.grant.response.access_token;
@@ -33,4 +33,15 @@ router.put('/:playlist/tracks/', (request, response) => {
         .then(data => response.json(data))
         .catch(error => response.json(error));
 });
+
+router.delete('/:playlist/tracks/', (request, response) => {
+    const playlistId = request.params.playlist;
+    const trackId = request.body.uri;
+    const token = request.session.grant.response.access_token;
+    const user = request.user;
+    deleteTrackFromPlaylist(token, user, playlistId, trackId)
+        .then(data => response.json(data))
+        .catch(error => response.json(error));
+});
+
 module.exports = router;

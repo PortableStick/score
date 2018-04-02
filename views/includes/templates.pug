@@ -9,7 +9,7 @@ template#playlist-widget
       li.collection-header.indigo.darken-3.white-text.row
         span.col.s7 {{name}} by {{owner.id}}
         a(href='{{external_urls.spotify}}' target='_blank').spotify-link.col.s5.white-text 
-          i.fa.fa-lg.fa-spotify &nbsp;
+          i(aria-hidden='true').fa.fa-lg.fa-spotify &nbsp;
           | Open in Spotify
       | {{#if tracks.items }}
       | {{#each tracks.items}}
@@ -19,6 +19,8 @@ template#playlist-widget
         a(href='{{track.external_urls.spotify}}' target='_blank').black-text.title {{track.name}}
         br
         a(href='{{track.artists.0.external_urls.spotify}}' target='_blank').black-text {{track.artists.0.name}}
+        button(type='button' data-id='{{track.id}}').btn-floating.waves-effect.waves-light.red.secondary-content.playlist-delete
+          i(aria-hidden='true').fa.fa-trash
       | {{/each}}
       | {{else}}
       li.collection-item.playlist-empty Playlist empty
@@ -46,4 +48,6 @@ template#playlist-item-template
         img(src='{{track.album.images.2.url}}' alt='Cover art for {{track.album.name}}').circle
       a(href='{{track.external_urls.spotify}}' target='_blank').black-text.title {{track.name}}
       br
-      a(href='{{track.artists.1.external_urls.spotify}}' target='_blank').black-text {{track.artists.1.name}}
+      a(href='{{track.artists.0.external_urls.spotify}}' target='_blank').black-text {{track.artists.0.name}}
+      button(type='button' data-id='{{track.id}}').btn-floating.waves-effect.waves-light.red.secondary-content.playlist-delete
+        i(aria-hidden='true').fa.fa-trash
