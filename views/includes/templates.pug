@@ -5,7 +5,16 @@ template#next-button
     button.btn.btn-large.next.indigo.darken-1(type="button")
         i.material-icons skip_next
 template#playlist-widget
-    iframe(src="https://open.spotify.com/embed?theme=white&uri={{uri}}",width="300",height="380",frameborder="0",allowtransparency="true")
+    ul.collection.with-header
+      li.collection-header.indigo.darken-3.white-text {{name}} by {{owner.id}}
+      | {{#if tracks.items }}
+      | {{#each tracks.items}}
+      li.collection-item.row
+        span.col.s10 {{track.name}} - {{track.album.name}}
+      | {{/each}}
+      | {{else}}
+      li.collection-item.playlist-empty Playlist empty
+      | {{/if}}
 template#option-template
     option(value='{{uri}}') {{name}}
 template#album-template
@@ -14,7 +23,7 @@ template#album-template
         | {{#each tracks}}
         li.collection-item.row(data-id='{{id}}')
             span.col.s10 {{track_number}} - {{name}}
-            button.tooltipped.waves-effect.waves-teal.btn-flat.secondary-content.col.s2.add-to-list(type="button" data-uri="${'{{uri}}'}'") +
+            button.tooltipped.waves-effect.waves-teal.btn-flat.secondary-content.col.s2.add-to-list(type="button" data-uri="{{uri}}") +
         | {{/each}}
     | {{/each}}
 template#progress-template
@@ -23,3 +32,7 @@ template#progress-template
             .indeterminate
 template#empty-track-template
     li.collection-header There doesn't seem to be any albums for this movie
+template#playlist-item-template
+    li.collection-item.row
+      span.col.s10 {{track.name}} - {{track.album.name}}
+

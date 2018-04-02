@@ -31,8 +31,10 @@ function _view(_c) {
 
     function updatePlaylistWidget() {
         if (!controller.currentPlaylist()) { return; }
-        const newPlaylist = playlistWidgetTemplate({ uri: controller.currentPlaylist() });
-        widget.html(newPlaylist);
+        controller.getPlaylist()
+            .then(data => {
+                widget.html(playlistWidgetTemplate(data));
+            });
     }
 
     function setCurrentPlaylist(uri) {
@@ -51,12 +53,13 @@ function _view(_c) {
         playlists.val(options.first().val());
         playlists.material_select();
         setCurrentPlaylist(options.first().val());
-        updatePlaylistWidget();
+        // TODO: Check out why I was updating here and fix
+        //updatePlaylistWidget();
     }
 
-    function populateTracks(currentMovie) {
-        const title = soundtrackify(currentMovie.data('title'));
-        const year = currentMovie.data('release-date').slice(0, 4);
+    function populateTracks($currentMovie) {
+        const title = soundtrackify($currentMovie.data('title'));
+        const year = $currentMovie.data('release-date').slice(0, 4);
         controller.getTracks(title, year)
             .then(albums => {
                 if (albums.length) {
@@ -76,16 +79,16 @@ function _view(_c) {
     function init() {
         //stuff for slick
         $('.coverflow').on('init', (event, slick) => {
-            const currentMovie = $(`#movie-${slick.currentSlide}`);
-            populateTracks(currentMovie);
+            const $currentMovie = $(`#movie-${slick.currentSlide}`);
+            populateTracks($currentMovie);
             $('.display').removeClass('hidden');
         });
 
         $('.coverflow').on('beforeChange', () => trackAndAlbumList.html($('#progress-template').html()));
 
         $('.coverflow').on('afterChange', (event, slick, slide) => {
-            const currentMovie = $(`#movie-${slide}`);
-            populateTracks(currentMovie);
+            const $currentMovie = $(`#movie-${slide}`);
+            populateTracks($currentMovie);
         });
 
         $('.coverflow').slick({
@@ -115,8 +118,8 @@ function _view(_c) {
             }
             controller.addTrackToPlaylist($(event.target).data('uri'))
                 .then(() => {
-                    updatePlaylistWidget();
                     Materialize.toast('<div class="success">Added to playlist</div>', 6000);
+                    updatePlaylistWidget();
                 })
                 .catch(error => {
                     console.error(error);
@@ -168,9 +171,8 @@ function _view(_c) {
 
 function _controller(_m) {
     const model = _m;
-    const state = {
-        currentPlaylist: undefined
-    };
+
+    let currentPlaylist = undefined;
 
     function getPlaylistId(uri) {
         const items = uri.split(':');
@@ -179,23 +181,28 @@ function _controller(_m) {
     }
 
     function getIdFromUri() {
-        return getPlaylistId(state.currentPlaylist);
+        return getPlaylistId(currentPlaylist);
     }
 
     return {
         currentPlaylist: _ => {
-            if (!_) return state.currentPlaylist;
-            state.currentPlaylist = _;
-            return state.currentPlaylist;
+            if (!_) return currentPlaylist;
+            currentPlaylist = _;
+            return currentPlaylist;
         },
         getPlaylists: data => model.postJSON('/playlists', data),
         getTracks: (title, year) => model.getJSON(`/tracks/${title}?year=${year}`),
-        addTrackToPlaylist: track => model.putJSON(`/playlists/${getIdFromUri()}/tracks/${encodeURIComponent(track)}`)
+        addTrackToPlaylist: track => {
+            const data = {
+                uri: track
+            };
+            return model.putJSON(`/playlists/${getIdFromUri()}/tracks`, data);
+        },
+        getPlaylist: () => model.getJSON(`/playlists/${getIdFromUri()}`)
     }; 
 }
 
-function _model(_c) {
-    const controller = _c;
+function _model() {
 
     function handleResponse(response) {
         if (response.ok) return response.json();
@@ -212,8 +219,8 @@ function _model(_c) {
             .then(handleResponse);
     }
 
-    function putJSON(url) {
-        return fetch(url, { method: 'PUT', credentials: 'same-origin' });
+    function putJSON(url, data = {}) {
+        return fetch(url, { method: 'PUT', credentials: 'same-origin', headers: { 'content-type': 'application/json' }, body: JSON.stringify(data) });
     }
 
     return { postJSON, getJSON, putJSON };

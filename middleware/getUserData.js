@@ -2,6 +2,9 @@ const { getUser } = require('../utils/spotify');
 
 function getUserData(request, response, next) {
     const token = request.session.grant && request.session.grant.response ? request.session.grant.response.access_token : undefined;
+    if (process.env.NODE_ENV === 'development') {
+        console.log('Token: ', token);
+    }
     if (token) {
         getUser(token)
             .then(user => {

@@ -6,7 +6,11 @@ const { TMDB_IMAGE_URL, TMDB_BACKDROP_URL } = require('../constants');
 router.get('/', function(request, response) {
     Movie.find({})
         .then(movies => {
-            response.render('index', { movies, imgurl: TMDB_IMAGE_URL, bdurl: TMDB_BACKDROP_URL, user: request.user });
+            response.render('index', { movies, imgurl: TMDB_IMAGE_URL, bdurl: TMDB_BACKDROP_URL, user: request.user, filters: {
+              'handlebars': text => {
+                return text;
+              } 
+            } });
         });
 });
 

@@ -50,7 +50,7 @@ function getJSON(url, queries = [], headers = {}) {
  * @param {Object} [headers={}]
  * @return {Promise}
  */
-function postJSON(url, body, queries = [], headers = {}) {
+function postJSON(url, body = {}, queries = [], headers = {}) {
     return fetch(`${url}${createQueries(queries)}`, { headers: Object.assign({}, POST_HEADERS, headers), body: JSON.stringify(body), method: 'POST' })
         .then(handleResponse);
 }
