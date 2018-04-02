@@ -1,12 +1,16 @@
 template#prev-button
-    button.btn.btn-large.previous.indigo.darken-1(type="button")
+    button.btn.btn-large.previous.indigo.darken-1(type='button')
         i.material-icons skip_previous
 template#next-button
-    button.btn.btn-large.next.indigo.darken-1(type="button")
+    button.btn.btn-large.next.indigo.darken-1(type='button')
         i.material-icons skip_next
 template#playlist-widget
     ul.collection.with-header
-      li.collection-header.indigo.darken-3.white-text {{name}} by {{owner.id}}
+      li.collection-header.indigo.darken-3.white-text.row
+        span.col.s8 {{name}} by {{owner.id}}
+        a(href='{{external_urls.spotify}}' target='_blank').spotify-link.col.s4.white-text 
+          i.fa.fa-lg.fa-spotify &nbsp;
+          | Open in Spotify
       | {{#if tracks.items }}
       | {{#each tracks.items}}
       li.collection-item.row
@@ -23,7 +27,7 @@ template#album-template
         | {{#each tracks}}
         li.collection-item.row(data-id='{{id}}')
             span.col.s10 {{track_number}} - {{name}}
-            button.tooltipped.waves-effect.waves-teal.btn-flat.secondary-content.col.s2.add-to-list(type="button" data-uri="{{uri}}") +
+            button.tooltipped.waves-effect.waves-teal.btn-flat.secondary-content.col.s2.add-to-list(type='button' data-uri='{{uri}}') +
         | {{/each}}
     | {{/each}}
 template#progress-template

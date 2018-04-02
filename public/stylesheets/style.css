@@ -122,3 +122,7 @@ main {
 #dismiss {
   cursor: pointer;
 }
+
+.spotify-link {
+  text-align: right;
+}
