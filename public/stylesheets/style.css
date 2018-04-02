@@ -62,6 +62,8 @@ main {
 
 #widget {
   margin-top: 10px;
+  overflow-y: scroll;
+  height: 380px;
 }
 
 #album {
