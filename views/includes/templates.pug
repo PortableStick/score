@@ -41,6 +41,9 @@ template#progress-template
 template#empty-track-template
     li.collection-header There doesn't seem to be any albums for this movie
 template#playlist-item-template
-    li.collection-item.row
-      span.col.s10 {{track.name}} - {{track.album.name}}
-
+    li.collection-item.avatar
+      a(href='{{track.album.external_urls.spotify}}' target='_blank')
+        img(src='{{track.album.images.2.url}}' alt='Cover art for {{track.album.name}}').circle
+      a(href='{{track.external_urls.spotify}}' target='_blank').black-text.title {{track.name}}
+      br
+      a(href='{{track.artists.1.external_urls.spotify}}' target='_blank').black-text {{track.artists.1.name}}
